@@ -29,14 +29,15 @@
                             <div class="row">
                                 <div class="col-8 ps-0">
                                     <div class="row mb-1">
-                                        <small><a href="#">Forgot Password</a></small>
+                                        <small><a href="ResetPassword">Forgot Password</a></small>
                                     </div>
                                     <div class="row">
-                                        <small><a href="#">New User? Register here</a></small>
+                                        <small><a href="Registration">New User? Register here</a></small>
                                     </div>
                                 </div>
                                 <div class="col-4 pe-0">
-                                    <button type="submit" class="btn btn-primary d-flex justify-content-emd">Login</button>
+                                    <button type="button" class="btn btn-primary d-flex justify-content-emd" onclick="exec()">Login
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -75,4 +76,37 @@
 .form-group {
     margin-bottom: 15px;
 }
+
+button {
+    margin-left: 40px;
+    margin-top: 4px;
+}
+
+.spinner-space {
+    display: inline-block;
+    margin-top: 5px;
+    margin-left: 5px;
+}
 </style>
+
+<script>
+    async function exec() {
+        let endpoint = "http://groceryapp.api.com/authentication/login";
+        let body = JSON.stringify({
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+        });
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', endpoint, true);
+        xhr.onload = function () {
+            var status = xhr.status;
+            if (status == 200) {
+                window.location.href = "Welcome";
+            } else {
+                window.alert("Wrong credentials are given");
+            }
+        };
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(body);
+    }
+</script>
