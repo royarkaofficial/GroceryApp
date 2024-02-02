@@ -15,7 +15,7 @@
 </head>
 <body class="set-bg">
     <form id="form1" class="needs-validation" novalidate runat="server">
-        <div class="form-container shadow-lg">
+        <div class="form-container">
             <div class="m-4">
                 <center>
                     <h3 class="pb-3">Registration</h3>
@@ -73,7 +73,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label class="mb-1" for="email">Email</label>
-                                <input type="text" class="form-control" id="email" required>
+                                <input type="email" class="form-control" id="email" required>
                                 <div class="invalid-feedback">
                                     Please enter your valid email address.
                                 </div>
@@ -82,7 +82,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label class="mb-1" for="password">Password</label>
-                                <input type="password" class="form-control" id="password" required minlength="6">
+                                <input type="password" class="form-control" id="password" autocomplete required minlength="6">
                                 <div class="invalid-feedback">
                                     Please enter a strong password with at least 6 characters.
                                 </div>
@@ -127,7 +127,10 @@
                 <div class="container">
                     <div class="row">
                         <div class="col">
-                            <button type="button" class="btn btn-primary" onclick="onSubmit()">Register</button>
+                            <button type="button" class="btn btn-primary form-btn" onclick="onSubmit()">
+                                Register
+                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                            </button>
                         </div>
                         <div class="col text-end mt-2">
                             <a href="Login">Already registered? Login here</a>
@@ -162,6 +165,10 @@ div.form-container {
     margin-top: 34px;
     margin-left: -40px;
 }
+
+.spinner {
+    height: 100vh;
+}
 </style>
 
 <script>
@@ -169,7 +176,7 @@ div.form-container {
 
     function onSubmit() {
         $(".needs-validation")[0].classList.add("was-validated");
-        if ($("input:invalid").length > 0) {
+        if ($("input:invalid").length > 0 || $("select:invalid").length > 0) {
             return;
         }
         if (code !== $("#captcha")[0].value) {

@@ -11,6 +11,7 @@
     left: 0;
     right: 0;
     border: 1px solid black;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 div.form-container {
@@ -25,4 +26,9 @@ div.toast {
     position: absolute !important;
     top: 10px !important;
     right: 10px !important;
+}
+
+span.spinner-border-sm {
+    display: inline-block;
+    margin-top: 4px;
 }

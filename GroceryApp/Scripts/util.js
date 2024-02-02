@@ -15,4 +15,12 @@
     for (let i = 0; i < anchors.length; i++) {
         anchors[i].style.pointerEvents = flag ? "none" : "auto";
     }
+    if (flag) {
+        let spinner = $(".spinner-border-sm")[0];
+        spinner.classList.add("spinner-border");
+    }
+    else {
+        let spinner = $(".spinner-border")[0];
+        spinner.classList.remove("spinner-border");
+    }
 }
