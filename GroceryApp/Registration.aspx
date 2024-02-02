@@ -8,6 +8,7 @@
     <link href="Content/style.css" rel="stylesheet" />
     <script src="Scripts/jquery-3.4.1.js"></script>
     <script src="Scripts/xhr.js"></script>
+    <script src="Scripts/util.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -117,7 +118,7 @@
                             </div>
                         </div>
                         <div class="col-1 text-center">
-                            <div class="form-group regenerate">
+                            <div class="form-group regenerate-captcha">
                                 <i class="fa" onclick="generateCaptcha()">&#xf021;</i>
                             </div>
                         </div>
@@ -126,7 +127,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col">
-                            <button type="button" class="btn btn-primary" onclick="exec()">Register</button>
+                            <button type="button" class="btn btn-primary" onclick="onSubmit()">Register</button>
                         </div>
                         <div class="col text-end mt-2">
                             <a href="Login">Already registered? Login here</a>
@@ -157,7 +158,7 @@ div.form-container {
     cursor: pointer;
 }
 
-.regenerate {
+.regenerate-captcha {
     margin-top: 34px;
     margin-left: -40px;
 }
@@ -166,7 +167,7 @@ div.form-container {
 <script>
     let code;
 
-    function exec() {
+    function onSubmit() {
         $(".needs-validation")[0].classList.add("was-validated");
         if ($("input:invalid").length > 0) {
             return;
@@ -176,6 +177,7 @@ div.form-container {
             $(captchaInvalidMsg).insertAfter($("#captcha")[0]);
             return 0;
         }
+        toggleForm(true);
         const endpoint = "registration";
         let data = {
             firstName: $("#firstname")[0].value,
@@ -186,10 +188,14 @@ div.form-container {
             email: $("#email")[0].value,
             password: $("#password")[0].value,
         };
-        let onOk = function () {
-            window.location.href = "Login";
+        const onOk = function () {
+            $(".toast")[0].classList.remove("bg-danger");
+            $(".toast")[0].classList.add("show", "bg-success");
+            $(".toast-body")[0].innerText = `Hi ${data.firstName}, you have registered successfully. You will be redirected to the login page shortly.`;
+            setTimeout(() => { window.location.href = "Login" }, 7000);
         };
-        let onError = function () {
+        const onError = function () {
+            toggleForm(false);
             $(".toast")[0].classList.add("show");    
         }
         send(HttpMethod.POST, endpoint, data, onOk, onError);

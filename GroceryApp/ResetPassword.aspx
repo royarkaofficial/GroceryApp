@@ -8,6 +8,7 @@
     <link href="Content/style.css" rel="stylesheet" />
     <script src="Scripts/jquery-3.4.1.js"></script>
     <script src="Scripts/xhr.js"></script>
+    <script src="Scripts/util.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
@@ -42,7 +43,7 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <button type="button" class="btn btn-primary mt-2" onclick="exec()">Change Password</button>
+                            <button type="button" class="btn btn-primary mt-2 form-btn" onclick="onSubmit()">Change Password</button>
                         </div>
                     </div>
                 </form>
@@ -68,9 +69,9 @@ div.form-container {
 </style>
 
 <script>
-    var alreadyShowingMsg = false;
+    let alreadyShowingMsg = false;
 
-    function exec() {
+    function onSubmit() {
         $(".needs-validation")[0].classList.add("was-validated");
         if ($("input:invalid").length > 0) {
             return;
@@ -78,20 +79,28 @@ div.form-container {
         let newPassword = $("#newpassword")[0].value;
         let confirmPassword = $("#confirmpassword")[0].value;
         if (newPassword !== confirmPassword) {
-            let captchaInvalidMsg = "<div id='custom-validation-msg' class='invalid-feedback' style='display:block;'>Passwords are not matching.</div>";
-            $(captchaInvalidMsg).insertAfter($("#confirmpassword")[0]);
+            if (!alreadyShowingMsg) {
+                alreadyShowingMsg = true;
+                let captchaInvalidMsg = "<div id='custom-validation-msg' class='invalid-feedback' style='display:block;'>Passwords are not matching.</div>";
+                $(captchaInvalidMsg).insertAfter($("#confirmpassword")[0]);
+            }
             return;
         }
         else {
+            toggleForm(true);
             const endpoint = "users/password";
             let data = {
                 email: $("#email")[0].value,
                 password: newPassword
             };
-            var onOk = function () {
-                window.location.href = "Login";
+            const onOk = function () {
+                $(".toast")[0].classList.remove("bg-danger");
+                $(".toast")[0].classList.add("show", "bg-success");
+                $(".toast-body")[0].innerText = "Password changed successfully. You will be redirected to the login page shortly.";
+                setTimeout(() => { window.location.href = "Login" }, 10000);
             }
-            var onError = function () {
+            const onError = function () {
+                toggleForm(false);
                 $(".toast")[0].classList.add("show");
             }
             send(HttpMethod.PUT, endpoint, data, onOk, onError);
