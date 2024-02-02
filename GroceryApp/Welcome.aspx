@@ -3,8 +3,8 @@
     <h1>This is the welcome page.</h1>
     <script>
         window.onload = function exec() {
-            var accessToken = localStorage.getItem("groceryapp_access_token");
-            if (accessToken && accessToken.length > 0) {
+            var accessToken = localStorage.getItem("grocery_app_access_token");
+            if (!(accessToken && accessToken.length > 0)) {
                 window.location.href = "Login";
             }
         }
