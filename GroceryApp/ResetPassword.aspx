@@ -43,7 +43,10 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <button type="button" class="btn btn-primary mt-2 form-btn" onclick="onSubmit()">Change Password</button>
+                            <button type="button" class="btn btn-primary mt-2 form-btn" onclick="onSubmit()">
+                                Change Password
+                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                            </button>
                         </div>
                     </div>
                 </form>
