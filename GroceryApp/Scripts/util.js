@@ -18,9 +18,13 @@
     if (flag) {
         let spinner = $(".spinner-border-sm")[0];
         spinner.classList.add("spinner-border");
+        let formBtn = $(".form-btn")[0];
+        formBtn.classList.add("form-btn-icon-spacer");
     }
     else {
         let spinner = $(".spinner-border")[0];
         spinner.classList.remove("spinner-border");
+        let formBtn = $(".form-btn")[0];
+        formBtn.classList.remove("form-btn-icon-spacer");
     }
 }

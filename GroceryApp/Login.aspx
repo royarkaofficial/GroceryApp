@@ -46,6 +46,7 @@
                         <div class="col-4 pe-0">
                             <button type="button" class="btn btn-primary form-btn" onclick="onSubmit()">
                                 Login
+                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
                             </button>
                         </div>
                     </div>
@@ -71,8 +72,12 @@ div.form-container {
 }
 
 .form-btn {
-    margin-left: 40px;
+    margin-left: 35px;
     margin-top: 6px;
+}
+
+.form-btn-icon-spacer {
+    margin-left: 17px !important;
 }
 </style>
 
