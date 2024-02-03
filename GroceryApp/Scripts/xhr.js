@@ -1,5 +1,6 @@
 ﻿let StatusCode = {
-    OK: 200
+    OK: 200,
+    UNAUTHORIZED: 401
 }
 
 let HttpMethod = {
@@ -12,13 +13,22 @@ let HttpMethod = {
 
 function send(method, endpoint, data, onOk, onError) {
     const baseUrl = "http://groceryapp.api.com/";
+    const accessToken = localStorage.getItem("grocery_app_access_token");
     let address = baseUrl + endpoint;
     data = JSON.stringify(data);
     const xhr = new XMLHttpRequest();
     xhr.open(method, address, true);
     xhr.onload = function () {
-        xhr.status == StatusCode.OK ? onOk(xhr.response) : onError(xhr.response);
+        if (xhr.status == StatusCode.UNAUTHORIZED) {
+            localStorage.removeItem("grocery_app_access_token");
+            localStorage.removeItem("grocery_app_user_id");
+            window.location.href = "Login";
+        }
+        xhr.status == StatusCode.OK ? onOk(JSON.parse(xhr.response)) : onError(JSON.parse(xhr.response), xhr.status);
     };
+    if (accessToken && accessToken.length > 0) {
+        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`);
+    }
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(data);
 }

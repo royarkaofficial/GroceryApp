@@ -28,3 +28,11 @@
         formBtn.classList.remove("form-btn-icon-spacer");
     }
 }
+
+function checkPageRequestValidity() {
+    const userId = localStorage.getItem("grocery_app_user_id");
+    const accessToken = localStorage.getItem("grocery_app_access_token");
+    if (!userId && !accessToken) {
+        window.location.href = "Login";
+    }
+}

@@ -94,8 +94,8 @@ div.form-container {
             password: $("#password")[0].value
         };
         const onOk = function (response) {
-            let data = JSON.parse(response);
-            localStorage.setItem("grocery_app_access_token", data.data.accessToken);
+            localStorage.setItem("grocery_app_access_token", response.data.accessToken);
+            localStorage.setItem("grocery_app_user_id", response.data.userId);
             $(".toast")[0].classList.remove("bg-danger");
             $(".toast")[0].classList.add("show", "bg-success");
             $(".toast-body")[0].innerText = "Logged in successfully. You will be redirected to the welcome page shortly.";
