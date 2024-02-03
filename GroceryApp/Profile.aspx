@@ -146,7 +146,7 @@
                 toggleForm(false);
                 $(".toast")[0].classList.add("show");
             }
-            send(HttpMethod.POST, endpoint, data, onOk, onError);
+            send(HttpMethod.PUT, endpoint, data, onOk, onError);
         }
     </script>
 </asp:Content>
