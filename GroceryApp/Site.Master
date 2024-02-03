@@ -7,6 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%: Page.Title %> - My ASP.NET Application</title>
+    <link href="Content/style.css" rel="stylesheet" />
     <script src="Scripts/jquery-3.4.1.js"></script>
     <script src="Scripts/xhr.js"></script>
     <script src="Scripts/util.js"></script>
@@ -22,7 +23,7 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
 </head>
-<body>
+<body class="set-bg">
     <form runat="server">
         <nav class="navbar navbar-expand-lg navbar-light bg-primary">
             <div class="container-fluid mx-5">
@@ -32,9 +33,16 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown me-2">
+                        <li id="cart-menu" class="nav-item">
+                            <i class="fa fa-shopping-cart"></i>
+                            <a class="nav-link text-white" href="Cart">Cart</a>
+                        </li>
+                        <li id="order-menu" class="nav-item">
+                            <a class="nav-link text-white" href="Order">Orders</a>
+                        </li>
+                        <li class="nav-item dropdown me-2" onclick="window.location.href = 'Profile'">
                             <img id="profile-img" src="./Assets/male.png"  />
-                            <a class="nav-link dropdown-toggle text-white" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-white" id="user-dropdown" href="Profile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="user-dropdown">
@@ -46,9 +54,8 @@
                                 </div>
                             </ul>
                         </li>
-                        <li id="cart-menu" class="nav-item">
-                            <i class="fa fa-shopping-cart"></i>
-                            <a class="nav-link text-white" href="Cart">Cart</a>
+                        <li id="logout-menu" class="nav-item">
+                            <a class="nav-link text-white" href="Cart">Log Out</a>
                         </li>
                     </ul>
                 </div>
