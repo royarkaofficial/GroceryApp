@@ -1,7 +1,9 @@
 ﻿function toggleForm(flag) {
     let inputs = $("input");
     for (let i = 0; i < inputs.length; i++) {
-        inputs[i].disabled = flag;
+        if (!inputs[i].classList.contains('no-enable')) {
+            inputs[i].disabled = flag;
+        }
     }
     let buttons = $(".form-btn");
     for (let i = 0; i < buttons.length; i++) {
@@ -9,7 +11,9 @@
     }
     let selects = $("select");
     for (let i = 0; i < selects.length; i++) {
-        selects[i].disabled = flag;
+        if (!selects[i].classList.contains('no-enable')) {
+            selects[i].disabled = flag;
+        }
     }
     let anchors = $("a");
     for (let i = 0; i < anchors.length; i++) {

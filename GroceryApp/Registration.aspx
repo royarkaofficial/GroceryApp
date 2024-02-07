@@ -141,7 +141,7 @@
         </div>
     </form>
 
-    <div id="" class="toast text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">
                 Something went wrong. Please try again.
@@ -199,7 +199,7 @@ div.form-container {
             $(".toast")[0].classList.remove("bg-danger");
             $(".toast")[0].classList.add("show", "bg-success");
             $(".toast-body")[0].innerText = `Hi ${data.firstName}, you have registered successfully. You will be redirected to the login page shortly.`;
-            setTimeout(() => { window.location.href = "Login" }, 7000);
+            setTimeout(() => { window.location.href = "Login" }, 4000);
         };
         const onError = function () {
             toggleForm(false);

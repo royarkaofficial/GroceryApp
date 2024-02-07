@@ -24,7 +24,7 @@
 
 </head>
 <body class="set-bg">
-    <form runat="server">
+    <form class="needs-validation" runat="server">
         <nav class="navbar navbar-expand-lg navbar-light bg-primary">
             <div class="container-fluid mx-5">
                 <a class="navbar-brand text-white" href="Welcome"><b>Grocery App</b></a>
@@ -64,6 +64,14 @@
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
+        </div>
+        <div class="toast text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Something went wrong. Please try again.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
         </div>
         <asp:ScriptManager runat="server">
             <Scripts>
@@ -151,6 +159,7 @@ ul.navbar-nav {
     let cartId;
     let productId;
     let cartMode;
+    let user;
 
     window.onload = function onLoad() {
         checkPageRequestValidity();
@@ -159,6 +168,16 @@ ul.navbar-nav {
         const onOk = function (response) {
             user = response.data;
             $("#user-dropdown")[0].innerText = `${user.firstName} ${user.lastName}`;
+            let routes = window.location.href.split("/");
+            if (routes[routes.length - 1].toUpperCase() == "PROFILE") {
+                $("#firstname")[0].value = user.firstName;
+                $("#lastname")[0].value = user.lastName;
+                $("#address")[0].value = user.address;
+                $("#email")[0].value = user.email;
+                $("#password")[0].value = user.password;
+                $("#role")[0].value = user.role;
+                $("#gender")[0].value = user.gender;
+            }
         };
         const onError = function (response) { };
         send(HttpMethod.GET, endpoint, null, onOk, onError);

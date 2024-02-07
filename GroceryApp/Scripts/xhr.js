@@ -11,9 +11,15 @@ let HttpMethod = {
     DELETE: "DELETE"
 }
 
+function getDetails() {
+    const userId = localStorage.getItem("grocery_app_user_id");
+    const accessToken = localStorage.getItem("grocery_app_access_token");
+    return { userId, accessToken };
+}
+
 function send(method, endpoint, data, onOk, onError) {
     const baseUrl = "http://groceryapp.api.com/";
-    const accessToken = localStorage.getItem("grocery_app_access_token");
+    const { accessToken } = getDetails();
     let address = baseUrl + endpoint;
     data = JSON.stringify(data);
     const xhr = new XMLHttpRequest();
