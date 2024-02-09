@@ -3,7 +3,7 @@
     <div class="form-container shadow-lg">
         <div class="m-4">
             <center>
-                <h3>Add new Product</h3>
+                <h3 id="form-header" class="mb-3">Add new Product</h3>
             </center>
             <div class="form-group">
                 <label class="mb-1" for="name">Name</label>
@@ -47,10 +47,6 @@
     <style>
     div.form-container {
         width: 400px;
-    }
-
-    .form-btn-icon-spacer {
-        margin-left: 17px !important;
     }
     </style>
     <script>
