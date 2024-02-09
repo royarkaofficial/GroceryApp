@@ -21,9 +21,10 @@
                 products = response.data;
                 products.forEach(p => {
                     let parser = new DOMParser();
-                    let content = parser.parseFromString(`<div id="$card-${p.id}" class="col-2">
-                                                              <div class="card" style="width: 200px;">
-                                                                  <img src="${p.imageUrl}" class="m-2 border" height="175" width="175" class="card-img-top">
+                    let content = parser.parseFromString(`<div id="$card-${p.id}" class="col-2 mb-3">
+                                                              <div class="card shadow-lg" style="width: 200px;">
+                                                                  <div class="border" style="background-image: url('${p.imageUrl}'); height: 175px; width: 175px; background-size: cover; margin: 11.5px;"></div>
+                                                                  <!--<img src="${p.imageUrl}" class="m-2 border" height="175" width="175" class="card-img-top">-->
                                                                   <div class="card-body pt-0">
                                                                       <h6 class="card-title">${p.name}</h6>
                                                                       <div class="row">

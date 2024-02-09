@@ -118,8 +118,8 @@
                     $(".needs-validation")[0].classList.remove("was-validated");
                     $(".toast")[0].classList.remove("bg-danger");
                     $(".toast")[0].classList.add("show", "bg-success");
-                    $(".toast-body")[0].innerText = `Profile updated successfully.`;
-                    $("#user-dropdown")[0].innerText = `${$('#firstname')[0].value} ${$('#lastname')[0].value}`;
+                    $(".toast-body")[0].innerText = `Product added successfully.`;
+                    $(".needs-validation")[0].reset();
                 }, 3000);
             };
             const onError = function () {

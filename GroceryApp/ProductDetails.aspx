@@ -1,59 +1,87 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ProductDetails.aspx.cs" Inherits="GroceryApp.ProductDetails" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="product-form-container">
-        <div class="product-form-subcontainer">
+    <div class="form-container shadow-lg">
+        <div class="m-4">
             <center>
-                <h3 class="pb-2">Add Product</h3>
+                <h3>Add new Product</h3>
             </center>
-            <form action="/" method="post">
-                <div class="form-group">
-                    <label class="mb-1" for="name">Product name</label>
-                    <input type="text" class="form-control" id="name">
+            <div class="form-group">
+                <label class="mb-1" for="name">Name</label>
+                <input type="text" class="form-control" id="name" required>
+                <div class="invalid-feedback">
+                    Please enter a valid product name.
                 </div>
-                <div class="form-group">
-                    <label class="mb-1" for="price">Price</label>
-                    <input type="number" class="form-control" id="price">
+            </div>
+            <div class="form-group">
+                <label class="mb-1" for="price">Price</label>
+                <input type="number" class="form-control" id="price" min="1" required minlength="6">
+                <div class="invalid-feedback">
+                    Price should be in positive.
                 </div>
-                <div class="form-group">
-                    <label class="mb-1" for="stock">Stock</label>
-                    <input type="number" class="form-control" id="stock">
+            </div>
+            <div class="form-group">
+                <label class="mb-1" for="stock">Stock</label>
+                <input type="number" class="form-control" id="stock" min="1" required minlength="6">
+                <div class="invalid-feedback">
+                    Stock should be in positive.
                 </div>
-                <div class="form-group">
-                    <label class="mb-1" for="imageurl">Image Url</label>
-                    <input type="url" class="form-control" id="imageurl">
+            </div>
+            <div class="form-group">
+                <label class="mb-1" for="imageUrl">ImageUrl</label>
+                <input type="url" class="form-control" id="imageUrl" required>
+                <div class="invalid-feedback">
+                    ImageUrl should be valid.
                 </div>
-                <div class="container">
-                    <div class="row">
-                        <button type="submit" class="btn btn-primary mt-2">Save</button>
-                    </div>
+            </div>
+            <div class="container">
+                <div class="row mt-4">
+                    <button type="button" class="btn btn-primary form-btn" onclick="onSubmit()">
+                        Add
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
+
     <style>
-    body {
-        background-image: url("./Assets/background.png");
-    }
-
-    .product-form-container {
+    div.form-container {
         width: 400px;
-        height: 460px;
-        background-color: #f2f3f5;
-        position: absolute;
-        margin: auto;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        border: 1px solid black;
     }
 
-    .product-form-subcontainer {
-        margin: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
+    .form-btn-icon-spacer {
+        margin-left: 17px !important;
     }
     </style>
+    <script>
+        function onSubmit() {
+            $(".needs-validation")[0].classList.add("was-validated");
+            if ($("input:invalid").length > 0) {
+                return;
+            }
+            toggleForm(true);
+            const endpoint = "products";
+            let data = {
+                name: $("#name")[0].value,
+                price: parseInt($("#price")[0].value),
+                stock: parseInt($("#stock")[0].value),
+                imageUrl: $("#imageUrl")[0].value
+            };
+            const onOk = function (response) {
+                setTimeout(() => {
+                    $(".toast")[0].classList.remove("bg-danger");
+                    $(".toast")[0].classList.add("show", "bg-success");
+                    $(".toast-body")[0].innerText = "Product added successfully.";
+                    $(".needs-validation")[0].classList.remove('was-validated');
+                    $(".needs-validation")[0].reset();
+                    toggleForm(false);
+                }, 5000);
+            };
+            const onError = function (response) {
+                toggleForm(false);
+                $(".toast")[0].classList.add('show');
+            };
+            send(HttpMethod.POST, endpoint, data, onOk, onError);
+        }
+    </script>
 </asp:Content>
