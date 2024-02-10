@@ -141,6 +141,7 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\enums.js" />
     <Content Include="Scripts\util.js" />
     <Content Include="Scripts\xhr.js" />
     <Content Include="Scripts\bootstrap.min.js.map" />

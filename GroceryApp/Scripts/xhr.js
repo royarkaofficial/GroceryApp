@@ -1,9 +1,9 @@
-﻿let StatusCode = {
+﻿const StatusCode = {
     OK: 200,
     UNAUTHORIZED: 401
 }
 
-let HttpMethod = {
+const HttpMethod = {
     GET: "GET",
     POST: "POST",
     PUT: "PUT",
