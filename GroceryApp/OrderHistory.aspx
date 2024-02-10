@@ -1,16 +1,29 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrderHistory.aspx.cs" Inherits="GroceryApp.OrderHistory" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div id="order-history-container">
-        <h4 class="py-3">
-            Order History
-        </h4>
+        <div id="page-header" class="p-3 bg-white">
+            <b>Order History</b>
+        </div>
         <div id="order-history-subcontainer">
             <!-- Orders will be auto injected here by the script -->
         </div>
     </div>
     <style>
+    #page-header {
+        font-size: 22px;
+    }
+
     .order-history-card {
         background-color: #f2f3f5;
+    }
+
+    #order-history-subcontainer {
+        height: calc(100vh - 160px);
+        overflow-x: hidden;
+        overflow-y: scroll;
+        border-radius: 5px;
+        border: 1px solid #000000;
+        background: #ffffff;
     }
 
     .order-history-card-container {
@@ -22,6 +35,7 @@
         width: 150px;
         background-size:cover;
         border-radius: 8px;
+        border: 1px solid #000000;
     }
 
     .order-preview-info {
@@ -71,16 +85,16 @@
             }
         ]
 
-        window.onload = function exec() {
+        function setOrderHistory() {
             orders.forEach(order => {
                 let root = document.getElementById("order-history-subcontainer");
                 var parser = new DOMParser();
                 let component =
-                `<div class="order-history-card mb-3">
+                `<div class="order-history-card m-3" style="border: 1px solid #000000;">
                     <div class="order-history-card-container">
                         <div class="row">
                             <div class="col-2 px-0">
-                                <div class="product-preview ms-3" style="background-image:url('${products.find(p => p.id == order.productIds[0]).imageUrl}')"></div>
+                                <div class="product-preview ms-3" style="background-image:url('${products.find(p => p.id == order.productIds[0]).imageUrl}');"></div>
                             </div>
                             <div class="col-10 my-3 order-preview-info">
                                 <div class="row mb-3 ms-2">${order.productIds.length} items were ordered</div>

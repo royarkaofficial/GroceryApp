@@ -50,34 +50,52 @@
     }
     </style>
     <script>
+        function setProduct(id) {
+            const endpoint = `products/${id}`;
+            const onOk = function (response) {
+                const product = response.data;
+                $("#name")[0].value = product.name;
+                $("#price")[0].value = product.price;
+                $("#stock")[0].value = product.stock;
+                $("#imageUrl")[0].value = product.imageUrl;
+            };
+            const onError = function () { };
+            send(HttpMethod.GET, endpoint, null, onOk, onError);
+        }
+
         function onSubmit() {
             $(".needs-validation")[0].classList.add("was-validated");
             if ($("input:invalid").length > 0) {
                 return;
             }
+            var queryParameters = new URLSearchParams(window.location.search);
+            const isEditMode = queryParameters.has("mode") && queryParameters.get("mode").toUpperCase() == "EDIT";
             toggleForm(true);
-            const endpoint = "products";
-            let data = {
+            const endpoint = `products${isEditMode ? '/' + queryParameters.get("productId").toString() : ''}`;
+            const data = {
                 name: $("#name")[0].value,
                 price: parseInt($("#price")[0].value),
                 stock: parseInt($("#stock")[0].value),
                 imageUrl: $("#imageUrl")[0].value
             };
+
             const onOk = function (response) {
                 setTimeout(() => {
                     $(".toast")[0].classList.remove("bg-danger");
                     $(".toast")[0].classList.add("show", "bg-success");
-                    $(".toast-body")[0].innerText = "Product added successfully.";
+                    $(".toast-body")[0].innerText = `Product ${isEditMode ? 'updated' : 'added'} successfully.`;
                     $(".needs-validation")[0].classList.remove('was-validated');
-                    $(".needs-validation")[0].reset();
+                    if (!isEditMode) {
+                        $(".needs-validation")[0].reset();
+                    }
                     toggleForm(false);
                 }, 5000);
             };
-            const onError = function (response) {
+            const onError = function () {
                 toggleForm(false);
                 $(".toast")[0].classList.add('show');
             };
-            send(HttpMethod.POST, endpoint, data, onOk, onError);
+            send(isEditMode ? HttpMethod.PATCH : HttpMethod.POST, endpoint, isEditMode ? JSON.stringify(data) : data, onOk, onError);
         }
     </script>
 </asp:Content>

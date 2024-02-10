@@ -99,6 +99,16 @@
     }
     </style>
     <script>
+        function setProfile(user) {
+            $("#firstname")[0].value = user.firstName;
+            $("#lastname")[0].value = user.lastName;
+            $("#address")[0].value = user.address;
+            $("#email")[0].value = user.email;
+            $("#password")[0].value = user.password;
+            $("#role")[0].value = user.role;
+            $("#gender")[0].value = user.gender;
+        }
+
         function onSubmit() {
             $(".needs-validation")[0].classList.add("was-validated");
             if ($("input:invalid").length > 0) {

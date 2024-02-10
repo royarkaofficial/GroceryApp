@@ -1,4 +1,7 @@
-﻿function toggleForm(flag) {
+﻿const userId = localStorage.getItem("grocery_app_user_id");
+const accessToken = localStorage.getItem("grocery_app_access_token");
+
+function toggleForm(flag) {
     let inputs = $("input");
     for (let i = 0; i < inputs.length; i++) {
         if (!inputs[i].classList.contains('no-enable')) {
@@ -33,9 +36,7 @@
     }
 }
 
-function checkPageRequestValidity() {
-    const userId = localStorage.getItem("grocery_app_user_id");
-    const accessToken = localStorage.getItem("grocery_app_access_token");
+function validateSession() {
     if (!userId && !accessToken) {
         window.location.href = "Login";
     }

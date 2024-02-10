@@ -105,6 +105,7 @@
     <Content Include="Assets\background.png" />
     <Content Include="Assets\male.png" />
     <Content Include="Assets\dropdown-icon.png" />
+    <Content Include="Assets\product-add.png" />
     <Content Include="Cart.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />

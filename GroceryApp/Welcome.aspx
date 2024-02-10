@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Welcome.aspx.cs" Inherits="GroceryApp.Welcome" %>
+﻿<%@ Page Title="Grocery App" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Welcome.aspx.cs" Inherits="GroceryApp.Welcome" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div id="page-content">
         <div class="container mx-2">
@@ -22,16 +22,26 @@
         let productToBeDeleted;
         let modal;
 
-        function renderProducts() {
+        function setProducts() {
             const endpoint = "products";
             const onOk = function (response) {
                 products = response.data;
+                const parser = new DOMParser();
+                let content = parser.parseFromString(`<div id="card-add" class="col-2 mb-3">
+                                          <div class="card shadow-lg" style="width: 200px;">
+                                              <div class="border border-primary" style="background-image: url('./Assets/product-add.png'); height: 202px; width: 175px; background-size: cover; margin: 11.5px;"></div>
+                                              <div class="card-body pt-0">
+                                                  <div class="d-grid">
+                                                      <a class="btn btn-primary btn-sm" href="ProductDetails">Add Product</a>
+                                                  </div>
+                                               </div>
+                                          </div>
+                                      </div>`, 'text/html')
+                $('#page-content .container .row')[0].append(content.getElementById(`card-add`));
                 products.forEach(p => {
-                    let parser = new DOMParser();
-                    let content = parser.parseFromString(`<div id="card-${p.id}" class="col-2 mb-3">
+                    content = parser.parseFromString(`<div id="card-${p.id}" class="col-2 mb-3">
                                                               <div class="card shadow-lg" style="width: 200px;">
                                                                   <div class="border" style="background-image: url('${p.imageUrl}'); height: 175px; width: 175px; background-size: cover; margin: 11.5px;"></div>
-                                                                  <!--<img src="${p.imageUrl}" class="m-2 border" height="175" width="175" class="card-img-top">-->
                                                                   <div class="card-body pt-0">
                                                                       <h6 class="card-title">${p.name}</h6>
                                                                       <div class="row">
@@ -81,7 +91,7 @@
         }
 
         function fun(id) {
-            window.location.href = `ProductDetails/${id}`;
+            window.location.href = `ProductDetails?productId=${id}&mode=edit`;
         }
     </script>
 </asp:Content>
