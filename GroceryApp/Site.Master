@@ -190,6 +190,7 @@ ul.navbar-nav {
 #cart-badge {
     margin-left: 6px;
     font-size: 12px;
+    font-family: sans-serif;
 }
 </style>
 
@@ -211,13 +212,14 @@ ul.navbar-nav {
     }
 
     function setPagewiseData() {
+        let callbacks = [];
         const queryParameters = new URLSearchParams(window.location.search);
         switch (window.location.pathname.toUpperCase()) {
             case "/PROFILE":
-                setProfile(user);
+                setProfile(currentUser);
                 break;
             case "/WELCOME":
-                fetchCartDetails();
+                callbacks.push(setProducts);
                 break;
             case "/PRODUCTDETAILS":
                 if (queryParameters.size == 2 && queryParameters.has("productId") && queryParameters.has("mode")) {
@@ -230,10 +232,14 @@ ul.navbar-nav {
             case "/ORDERHISTORY":
                 setOrderHistory();
                 break;
+            case "/CART":
+                callbacks.push(isCartEmpty);
+                break;
         }
+        fetchCartDetails(callbacks);
     }
 
-    function fetchCartDetails() {
+    function fetchCartDetails(callbacks) {
         const endpoint = `users/${userId}/carts`;
         const onOk = function (response) {
             if (response.data) {
@@ -245,10 +251,23 @@ ul.navbar-nav {
                 cartId = null;
                 productsUnderCart = [];
             }
-            setProducts();
+            if (callbacks && callbacks.length > 0) {
+                callbacks.forEach(callback => callback());
+            }
         };
         const onError = function () { };
         send(HttpMethod.GET, endpoint, null, onOk, onError);
+    }
+
+    function updateCartBadge() {
+        const cartBadge = $("#cart-badge")[0];
+        if (productsUnderCart.length > 0) {
+            cartBadge.style.display = "inline-block";
+        }
+        else {
+            cartBadge.style.display = "none";
+        }
+        cartBadge.innerText = productsUnderCart.length;
     }
 
     function logOut() {

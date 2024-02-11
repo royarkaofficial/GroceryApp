@@ -153,16 +153,5 @@
                 send(HttpMethod.POST, endpoint, data, onOk, onError);
             }
         }
-
-        function updateCartBadge() {
-            const cartBadge = $("#cart-badge")[0];
-            if (productsUnderCart.length > 0) {
-                cartBadge.style.display = "inline-block";
-            }
-            else {
-                cartBadge.style.display = "none";
-            }
-            cartBadge.innerText = productsUnderCart.length;
-        }
     </script>
 </asp:Content>
