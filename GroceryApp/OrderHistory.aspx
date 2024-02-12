@@ -89,7 +89,7 @@
             orders.forEach(order => {
                 let root = document.getElementById("order-history-subcontainer");
                 var parser = new DOMParser();
-                let component =
+                let componentHtml =
                 `<div class="order-history-card m-3" style="border: 1px solid #000000;">
                     <div class="order-history-card-container">
                         <div class="row">
@@ -104,8 +104,8 @@
                         </div>
                     </div>
                 </div>`;
-                var componentHtml = parser.parseFromString(component, "text/html");
-                var node = componentHtml.getElementsByClassName('order-history-card')[0];
+                var component = parser.parseFromString(componentHtml, "text/html");
+                var node = component.getElementsByClassName('order-history-card')[0];
                 root.appendChild(node);
             });
         }

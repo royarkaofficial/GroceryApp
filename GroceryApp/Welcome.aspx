@@ -18,7 +18,6 @@
         }
     </style>
     <script>
-        let products;
         let productToBeDeleted;
         let modal;
 
@@ -55,7 +54,7 @@
                         ((currentUser.role == UserRole.ADMIN) ?
                             `<i class="fa fa-trash-o pe-2" style="font-size: 24px; color: red;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete" onclick="onDelete(${p.id})"></i>
                             <i class="fa fa-pencil" style="font-size: 24px; color: blue;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Edit" onclick="redirectToEditProductPage(${p.id})"></i>` :
-                            `<button id="cart-btn-${p.id}" type="button" class="btn btn-outline-${isAlreadyAddedToTheCart ? "danger" : "primary"} btn-sm" onclick="modifyCart(${p.id})">${isAlreadyAddedToTheCart ? "Remove" : "Add to Cart"}</button>`) +
+                        `<button id="cart-btn-${p.id}" type="button" class="btn btn-outline-${isAlreadyAddedToTheCart ? "danger" : "primary"} btn-sm" onclick="modifyCart({id: ${p.id}, price: ${p.price}})">${isAlreadyAddedToTheCart ? "Remove" : "Add to Cart"}</button>`) +
                                                                           `</div>
                                                                       </div>
                                                                    </div>
@@ -97,61 +96,6 @@
 
         function redirectToEditProductPage(id) {
             window.location.href = `ProductDetails?productId=${id}&mode=edit`;
-        }
-
-        function modifyCart(id) {
-            const button = $(`#cart-btn-${id}`)[0];
-            const isAlreadyAddedToTheCart = productsUnderCart.findIndex(x => x == id) > -1;
-            let mode;
-            if (isAlreadyAddedToTheCart) {
-                productsUnderCart = productsUnderCart.filter(x => x != id);
-                button.classList.add('btn-outline-primary');
-                button.classList.remove('btn-outline-danger');
-                button.innerText = "Add to Cart";
-                mode = CartMode.DELETE;
-            }
-            else {
-                productsUnderCart.push(id);
-                button.classList.add('btn-outline-danger');
-                button.classList.remove('btn-outline-primary');
-                button.innerText = "Remove";
-                mode = CartMode.ADD;
-            }
-            updateCartBadge();
-            const data = {
-                productId: id,
-                operationType: mode
-            }
-            if (cartId) {
-                const endpoint = `users/${userId}/carts/${cartId}`;
-                const onOk = function (response) {
-                    $(".toast")[0].classList.remove("bg-danger");
-                    $(".toast")[0].classList.add("show", "bg-success");
-                    $(".toast-body")[0].innerText = `Product ${mode == CartMode.ADD ? 'added to' : 'removed from'} the cart.`;
-                    if (productsUnderCart.length == 0) {
-                        cartId = null;
-                    }
-                };
-                const onError = function () {
-                    $(".toast")[0].classList.add('show');
-                    $(".toast-body")[0].innerText = `Something went wrong.`;
-                };
-                send(HttpMethod.PUT, endpoint, data, onOk, onError);
-            }
-            else {
-                const endpoint = `users/${userId}/carts`;
-                const onOk = function (response) {
-                    $(".toast")[0].classList.remove("bg-danger");
-                    $(".toast")[0].classList.add("show", "bg-success");
-                    $(".toast-body")[0].innerText = `Product ${mode == CartMode.ADD ? 'added to' : 'removed from'} the cart.`;
-                    cartId = response.data.id;
-                };
-                const onError = function () {
-                    $(".toast")[0].classList.add('show');
-                    $(".toast-body")[0].innerText = `Something went wrong.`;
-                };
-                send(HttpMethod.POST, endpoint, data, onOk, onError);
-            }
         }
     </script>
 </asp:Content>

@@ -71,7 +71,7 @@
                 </div>
             </div>
         </nav>
-        <div class="container body-content">
+        <div id="page-content" class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
         </div>
@@ -133,6 +133,11 @@
 </html>
 
 <style>
+#page-content {
+    margin-right: 60px;
+    margin-left: 60px;
+}
+
 nav.navbar {
     height: 60px;
 }
@@ -197,7 +202,10 @@ ul.navbar-nav {
 <script>
     let currentUser;
     let cartId;
+    let products = [];
     let productsUnderCart = [];
+    let totalPrice = 0;
+    let latestProductIdToBeRemovedFromCart;
 
     window.onload = function onLoad() {
         validateSession();
@@ -268,6 +276,75 @@ ul.navbar-nav {
             cartBadge.style.display = "none";
         }
         cartBadge.innerText = productsUnderCart.length;
+    }
+
+    function modifyCart({ id, price }) {
+        const button = $(`#cart-btn-${id}`)[0];
+        const isAlreadyAddedToTheCart = productsUnderCart.findIndex(x => x == id) > -1;
+        let mode;
+        if (isAlreadyAddedToTheCart) {
+            productsUnderCart = productsUnderCart.filter(x => x != id);
+            latestProductIdToBeRemovedFromCart = id;
+            if (button) {
+                button.classList.add('btn-outline-primary');
+                button.classList.remove('btn-outline-danger');
+                button.innerText = "Add to Cart";
+            }
+            mode = CartMode.DELETE;
+            totalPrice += price;
+        }
+        else {
+            productsUnderCart.push(id);
+            button.classList.add('btn-outline-danger');
+            button.classList.remove('btn-outline-primary');
+            button.innerText = "Remove";
+            mode = CartMode.ADD;
+            totalPrice -= price;
+        }
+        updateCartBadge();
+        const data = {
+            productId: id,
+            operationType: mode
+        }
+        if (cartId) {
+            const endpoint = `users/${userId}/carts/${cartId}`;
+            const onOk = function (response) {
+                $(".toast")[0].classList.remove("bg-danger");
+                $(".toast")[0].classList.add("show", "bg-success");
+                $(".toast-body")[0].innerText = `Product ${mode == CartMode.ADD ? 'added to' : 'removed from'} the cart.`;
+                if (productsUnderCart.length == 0) {
+                    cartId = null;
+                }
+                if (mode == CartMode.DELETE) {
+                    const el = $(`#product-under-cart-${latestProductIdToBeRemovedFromCart}`);
+                    if (el && el.length > 0 && el[0]) {
+                        el[0].remove();
+                        if (productsUnderCart.length == 0) {
+                            isCartEmpty();
+                        }
+                    }
+                }
+            };
+            const onError = function () {
+                $(".toast")[0].classList.add('show');
+                $(".toast-body")[0].innerText = `Something went wrong.`;
+            };
+            send(HttpMethod.PUT, endpoint, data, onOk, onError);
+        }
+        else {
+            const endpoint = `users/${userId}/carts`;
+            const onOk = function (response) {
+                $(".toast")[0].classList.remove("bg-danger");
+                $(".toast")[0].classList.add("show", "bg-success");
+                $(".toast-body")[0].innerText = `Product ${mode == CartMode.ADD ? 'added to' : 'removed from'} the cart.`;
+                cartId = response.data.id;
+            };
+            const onError = function () {
+                $(".toast")[0].classList.add('show');
+                $(".toast-body")[0].innerText = `Something went wrong.`;
+            };
+            send(HttpMethod.POST, endpoint, data, onOk, onError);
+        }
     }
 
     function logOut() {
