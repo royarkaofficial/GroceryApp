@@ -96,6 +96,7 @@ div.form-container {
         const onOk = function (response) {
             localStorage.setItem("grocery_app_access_token", response.data.accessToken);
             localStorage.setItem("grocery_app_user_id", response.data.userId);
+            localStorage.removeItem("order_placed_successfully");
             $(".toast")[0].classList.remove("bg-danger");
             $(".toast")[0].classList.add("show", "bg-success");
             $(".toast-body")[0].innerText = "Logged in successfully. You will be redirected to the welcome page shortly.";

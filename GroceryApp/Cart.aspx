@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    <div id="existing-cart" class="container hide-container">
+    <div id="existing-cart" class="container hide-container mx-0">
         <div class="row justify-content-between">
             <div id="cart-container" class="col-9 p-0 border border-black bg-white">
                 <div class="row px-4 pt-4 pb-2">
@@ -35,7 +35,59 @@
                     </div>
                 </div>
             </div>
-            <div id="payment-container" class="col-3"></div>
+            <div id="payment-container" class="col-3 border border-black bg-white px-0">
+                <div class="m-4">
+                    <h3 class="mb-4">Payment Details</h3>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col text-start px-0">
+                                <p id="cart-item-count"></p>
+                            </div>
+                            <div class="col text-end px-0">
+                                <p class="total-amount"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-start px-0">
+                                <p>Delivery Fee</p>
+                            </div>
+                            <div class="col text-end px-0">
+                                <p>Free</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <hr />
+                        </div>
+                        <div class="row">
+                            <div class="col text-start px-0">
+                                <p>Total Amount</p>
+                            </div>
+                            <div class="col text-end px-0">
+                                <p class="fw-bold total-amount"></p>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <label for="payment-mode" class="px-0 mb-1">Payment Mode</label>
+                            <select id="payment-mode" class="form-select" required>
+                                <option value="" selected>Select a payment mode</option>
+                                <option value="1">Cash On Delivery</option>
+                                <option value="2">UPI</option>
+                                <option value="3">Credit Card</option>
+                                <option value="4">NEFT</option>
+                                <option value="5">Wallet</option>
+                            </select>
+                            <div class="invalid-feedback px-0">
+                                Please select a payment mode.
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col text-end px-0">
+                                <button type="button" class="btn btn-primary rounded-pill" onclick="placeOrder()">Place Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <style>
@@ -60,19 +112,31 @@
             width: 240px;
         }
 
+        #existing-cart {
+            max-width: 100%;
+        }
+
         #payment-container {
-            height: 400px;
-            background-color: #000000;
+            height: max-content;
+            width: 24%;
         }
     </style>
     <script>
-        function emptyCart() {
+        let productDetails = [];
+        let totalAmount;
+
+        function emptyCart(redirect = false) {
             const endpoint = `users/${userId}/carts/${cartId}`;
             const onOk = function () {
-                cartId = null;
-                productsUnderCart = [];
-                updateCartBadge();
-                isCartEmpty();
+                if (redirect) {
+                    window.location.href = "Welcome";
+                }
+                else {
+                    cartId = null;
+                    productsUnderCart = [];
+                    updateCartBadge();
+                    isCartEmpty();
+                }
             };
             const onError = function () { };
             send(HttpMethod.DELETE, endpoint, null, onOk, onError);
@@ -90,10 +154,12 @@
                 $("#delivery-address")[0].innerText = `Address: ${currentUser.address}`;
                 const endpoint = `products?productIds=${productsUnderCart.join(",")}`;
                 const onOk = function (response) {
+                    productDetails = response.data;
+                    showPaymentDetails();
                     const parser = new DOMParser();
                     const root = $("#products-under-cart")[0];
                     productsUnderCart.forEach(id => {
-                        const product = response.data.find(x => x.id == id);
+                        const product = productDetails.find(x => x.id == id);
                         const component = parser.parseFromString(`<div id="product-under-cart-${id}" class="container mb-3 border" style="border-radius: 10px; background-color: #f2f3f5;">
                                                                       <div class="row p-2">
                                                                           <div class="col-3 px-0">
@@ -127,6 +193,37 @@
                 existingCart.classList.add("hide-container");
                 existingCart.classList.remove("show-container");
             }
+        }
+
+        function showPaymentDetails() {
+            totalAmount = 0;
+            productsUnderCart.forEach(id => { totalAmount += productDetails.find(p => p.id == id).price; });
+            $("#cart-item-count")[0].innerText = `Price (${productsUnderCart.length} ${productsUnderCart.length == 1 ? 'item' : 'items'})`;
+            $(".total-amount")[0].innerText = totalAmount;
+            $(".total-amount")[1].innerText = totalAmount;
+        }
+
+        function placeOrder() {
+            $("form")[0].classList.add("needs-validation", "was-validated");
+            if ($("select:invalid").length > 0) {
+                return;
+            }
+            const endpoint = `users/${userId}/orders/place`;
+            const data = {
+                paymentRequest: {
+                    amount: totalAmount,
+                    paymentType: parseInt($("select")[0].value)
+                },
+                orderRequest: {
+                    productIds: productsUnderCart
+                }
+            };
+            const onOk = function () {
+                localStorage.setItem("order_placed_successfully", "true");
+                emptyCart(true);
+            };
+            const onError = function () { };
+            send(HttpMethod.POST, endpoint, data, onOk, onError);
         }
     </script>
 </asp:Content>

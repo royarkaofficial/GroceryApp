@@ -136,6 +136,7 @@
 #page-content {
     margin-right: 60px;
     margin-left: 60px;
+    max-width: calc(100vw - 114px);
 }
 
 nav.navbar {
@@ -227,6 +228,13 @@ ul.navbar-nav {
                 setProfile(currentUser);
                 break;
             case "/WELCOME":
+                const isOrderPlaced = localStorage.getItem("order_placed_successfully");
+                if (isOrderPlaced) {
+                    localStorage.removeItem("order_placed_successfully");
+                    $(".toast")[0].classList.remove("bg-danger");
+                    $(".toast")[0].classList.add("show", "bg-success");
+                    $(".toast-body")[0].innerText = 'Order placed successfully';
+                }
                 callbacks.push(setProducts);
                 break;
             case "/PRODUCTDETAILS":
@@ -289,6 +297,9 @@ ul.navbar-nav {
                 button.classList.add('btn-outline-primary');
                 button.classList.remove('btn-outline-danger');
                 button.innerText = "Add to Cart";
+            }
+            else {
+                showPaymentDetails();
             }
             mode = CartMode.DELETE;
             totalPrice += price;
