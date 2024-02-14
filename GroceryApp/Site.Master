@@ -248,6 +248,9 @@ ul.navbar-nav {
             case "/ORDERHISTORY":
                 setOrderHistory();
                 break;
+            case "/ORDERHISTORYDETAILS":
+                callbacks.push(setOrderHistoryDetails);
+                break;
             case "/CART":
                 callbacks.push(isCartEmpty);
                 break;

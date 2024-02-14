@@ -165,7 +165,7 @@
                                                                           <div class="col-3 px-0">
                                                                               <div class="border border-1" style="background-image: url('${product.imageUrl}'); height: 130px; width: 130px; background-size: cover;"></div>
                                                                           </div>
-                                                                          <div class="col-9 px-0" style="margin-left: -26px;">
+                                                                          <div class="col-9 px-0" style="margin-left: -70px;">
                                                                             <div class="row" style="font-size: 17px; margin-top: 10px;">
                                                                                 <p class="px-0">${product.name}</p>
                                                                             </div>
